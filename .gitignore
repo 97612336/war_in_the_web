@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# 去除编辑器配置文件
+.idea/
+
 # Distribution / packaging
 .Python
 build/
