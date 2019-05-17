@@ -17,10 +17,12 @@ from django.contrib import admin
 from django.urls import path, include
 
 from army.urls import army_urls
-from city.urls import city_urls
+from map.urls import map_urls
+from myuser.urls import myuser_urls
 
 urlpatterns = [
-    path('city/', include(city_urls)),
     path('army/', include(army_urls)),
+    path('map/', include(map_urls)),
+    path('myuser/', include(myuser_urls)),
     path('admin/', admin.site.urls),
 ]
