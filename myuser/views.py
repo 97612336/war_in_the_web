@@ -1,14 +1,27 @@
 import datetime
+import logging
 
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 from django.shortcuts import render
 
 # Create your views here.
-from map.util import create_one_city
+from map.models import get_random_x_y, Map
 from myuser.models import Myuser
 
 
+# 给用户随机生成一个坐标
+def set_user_location(user_id):
+    x, y = get_random_x_y()
+    m = Map()
+    m.x_num = x
+    m.y_num = y
+    m.blong_to = user_id
+    m.building = 1  # 1代表主城
+    m.save()
+
+
+# 用户注册
 def myregister(request):
     username = request.GET.get('username')
     password = request.GET.get('password')
@@ -22,13 +35,14 @@ def myregister(request):
         u.user_kind = 1
         u.register_datetime = datetime.datetime.now()
         u.save()
-        # 注册成功之后,往地图表里插入一条数据
-        x_num, y_num = create_one_city(u)
-        return HttpResponse('注册成功%s,%s' % (x_num, y_num))
+        # 用户注册成功，然后生成一个坐标给用户使用
+        set_user_location(u.id)
+        return HttpResponse('注册成功%s,%s' % (u.id, u.username))
     else:
         return HttpResponse("参数不合法")
 
 
+# 　用户登录
 def mylogin(request):
     username = request.GET.get('username')
     password = request.GET.get('password')
