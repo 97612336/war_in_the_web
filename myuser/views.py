@@ -6,18 +6,20 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 # Create your views here.
-from map.models import get_random_x_y, Map
+from map.models import Map
 from myuser.models import Myuser
 
-
 # 给用户随机生成一个坐标
+from myuser.utils import get_random_x_y
+
+
 def set_user_location(user_id):
     x, y = get_random_x_y()
     m = Map()
     m.x_num = x
     m.y_num = y
     m.blong_to = user_id
-    m.building = 1  # 1代表主城
+    m.building_id = 1  # 1代表主城
     m.save()
 
 
